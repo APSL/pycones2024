@@ -1,0 +1,196 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Postal clerk",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Courier",
+      "permissions": []
+    }
+  },
+  {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$WRiJW5Iwt4rzWVdL0qLgMx$sgyy79vRDGUlH+/EVdyxKJ/EGhlXgYyapcdI4IsgZc8=",
+            "last_login": "2024-09-16T16:19:08.756Z",
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-09-16T16:18:56.241Z",
+            "groups": [1,2],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$WRiJW5Iwt4rzWVdL0qLgMx$sgyy79vRDGUlH+/EVdyxKJ/EGhlXgYyapcdI4IsgZc8=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "Clerk",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2024-09-16T16:22:36Z",
+            "groups": [1],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$A501uMqLB9yKplYA822PWH$ABuOo5VPGCB5AMtJmyPPBofuV3tyjee28eEN6kGB9lw=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "Courier",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2024-09-16T16:22:49Z",
+            "groups": [2],
+            "user_permissions": []
+        }
+    },
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Postal clerk"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Courier"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 1,
+    "fields": {
+      "street_address": "Calle Mayor, 1",
+      "city": "Madrid",
+      "state": "Madrid",
+      "postal_code": "28013",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 2,
+    "fields": {
+      "street_address": "Avenida de la Constitución, 101",
+      "city": "Sevilla",
+      "state": "Andalucía",
+      "postal_code": "41001",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 3,
+    "fields": {
+      "street_address": "Passeig de Gràcia, 50",
+      "city": "Barcelona",
+      "state": "Cataluña",
+      "postal_code": "08007",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 4,
+    "fields": {
+      "street_address": "Calle Colón, 23",
+      "city": "Valencia",
+      "state": "Valencia",
+      "postal_code": "46004",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 5,
+    "fields": {
+      "street_address": "Calle San Bernardo, 8",
+      "city": "Salamanca",
+      "state": "Castilla y León",
+      "postal_code": "37002",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 6,
+    "fields": {
+      "street_address": "Gran Vía, 67",
+      "city": "Bilbao",
+      "state": "País Vasco",
+      "postal_code": "48011",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 7,
+    "fields": {
+      "street_address": "Avenida Galicia, 27",
+      "city": "Oviedo",
+      "state": "Asturias",
+      "postal_code": "33005",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 8,
+    "fields": {
+      "street_address": "Calle Santiago, 3",
+      "city": "Zaragoza",
+      "state": "Aragón",
+      "postal_code": "50003",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 9,
+    "fields": {
+      "street_address": "Calle Castilla, 15",
+      "city": "Santander",
+      "state": "Cantabria",
+      "postal_code": "39002",
+      "country": "España"
+    }
+  },
+  {
+    "model": "core.address",
+    "pk": 10,
+    "fields": {
+      "street_address": "Calle León y Castillo, 112",
+      "city": "Las Palmas de Gran Canaria",
+      "state": "Canarias",
+      "postal_code": "35004",
+      "country": "España"
+    }
+  }
+]

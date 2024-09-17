@@ -1,0 +1,112 @@
+[tool.pytest.ini_options]
+# https://pytest-django.readthedocs.org/en/latest/configuring_django.html
+DJANGO_SETTINGS_MODULE = "main.settings"
+DJANGO_CONFIGURATION = "Test"
+python_files = [
+    "tests.py",
+    "test_*.py",
+    "*_tests.py",
+]
+
+# https://pytest-django.readthedocs.io/en/latest/database.html
+addopts = "--reuse-db --no-migrations --flake8 --black"
+
+#  Running test in paralell https://doc.pytest.org/en/latest/xdist.html
+# addopts = "--reuse-db --no-migrations --cipdb --flake8 --mypy --black -n auto"
+
+# https://doc.pytest.org/en/latest/example/markers.html
+markers = [
+    "unit_test: Pure unit tests.",
+    "integration_test: Tests that access a database, API, etc.",
+    "functional_test: End to end tests that needs a browser.",
+]
+
+# Filter warnings from 3rd party packages in site-packages not related with our code.
+filterwarnings = [
+    'ignore::DeprecationWarning',
+    'ignore:.*Item subclass and should not be a collector.*',
+]
+
+norecursedirs = [
+    "migrations",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".git",
+    ".tox",
+    ".eggs",
+    "*.egg,",
+    "static",
+    "templates",
+    "locale",
+]
+
+# This config is for running flake8 within pytest. The config for flake8 stand-alone is in .flake8 file.
+# https://pep8.readthedocs.io/en/latest/intro.html#error-codes
+# https://flake8.pycqa.org/en/latest/user/error-codes.html
+flake8-max-line-length = 120
+flake8-max-doc-length = 120
+flake8-max-complexity = 10
+# extend-ignore is not supported so we ignore the defaults ones plus E203
+# https://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-ignore
+flake8-ignore = ["E121", "E123", "E126", "E226", "E24", "E704", "W503", "W504", "E203"]
+
+[tool.black]
+line-length = 120
+color = true
+extend-exclude = '''
+(
+  migrations
+  | .pytest_cache
+  | .tox
+  | static
+  | templates
+  | locale
+)
+'''
+
+[tool.bandit]
+exclude_dirs = [
+    "test",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".git",
+    ".tox",
+    ".eggs",
+    "*.egg,",
+    "static",
+    "templates",
+    "locale",
+]
+
+[tool.mypy]
+# https://mypy.readthedocs.io/en/latest/config_file.html
+pretty = true
+show_column_numbers = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+warn_unused_configs = true
+check_untyped_defs = false
+plugins = ["mypy_django_plugin.main"]
+
+[[tool.mypy.overrides]]
+module = [
+    "django_migration_checker.*",
+    "kaio.*",
+    "configurations.*",
+    "debug_toolbar.*",
+    "storages.backends.*",
+    "django_tables2.*",
+    "django_filters.*",
+    "extra_views.*",
+    "rest_framework.*",
+    "model_clone.*",
+    "django_metacrud.*",
+]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "main.settings"
+strict_settings = false

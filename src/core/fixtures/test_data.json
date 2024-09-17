@@ -1,0 +1,56 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 9998,
+    "fields": {
+      "username": "PostalClerkTest",
+      "email": "admin@example.com",
+      "password": "1234",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "groups": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 9999,
+    "fields": {
+      "username": "CourierTest",
+      "email": "courier@example.com",
+      "password": "1234",
+      "is_active": true,
+      "is_superuser": false,
+      "is_staff": false,
+      "groups": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "core.package",
+    "pk": 1,
+    "fields": {
+      "tracking_number": "123456789",
+      "status": 1,
+      "origin_address": 1,
+      "destination_address": 2,
+      "created": "2023-11-01T00:00:00Z",
+      "modified": "2023-11-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.package",
+    "pk": 2,
+    "fields": {
+      "tracking_number": "987654321",
+      "status": 1,
+      "origin_address": 2,
+      "destination_address": 1,
+      "created": "2023-11-01T00:00:00Z",
+      "modified": "2023-11-01T00:00:00Z"
+    }
+  }
+]

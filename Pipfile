@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==4.2"
+django-extensions = "==3.2.3"
+djangorestframework = "==3.15.2"
+django-configurations = "==2.5.1"
+django-rest-knox = "==5.0.1"
+drf-spectacular = "==0.27.2"
+
+[dev-packages]
+black = "==24.8.0"
+pytest = "==8.3.2"
+flake8 = "==5.0.1"
+flake8-django = "==1.4"
+flake8-eradicate = "==1.5.0"
+pytest-black = "==0.3.12"
+pytest-flake8 = "==1.2.2"
+pytest-django = "==4.9.0"
+django-debug-toolbar = "==4.3.0"
+pygraphviz = "==1.13"
+ipdb = "==0.13.13"
+
+[requires]
+python_version = "3.11"
+python_full_version = "3.11.7"
