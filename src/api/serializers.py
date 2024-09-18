@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from core.examples import PackageInExamples, PackageExamples, TrackingHistoryInExamples
+from core.examples import (
+    PackageInExamples,
+    PackageExamples,
+    TrackingHistoryInExamples,
+    PackageCreatedExamples,
+    TrackingHistoryExamples,
+)
 from core.models import Address, Package, TrackingHistory
 
 
@@ -13,6 +19,14 @@ class AddressRelatedSerializer(serializers.ModelSerializer):
 
 
 class TrackingHistoryInSerializer(serializers.ModelSerializer, TrackingHistoryInExamples):
+    """Input to create a new tracking history."""
+
+    class Meta:
+        model = TrackingHistory
+        fields = ["text"]
+
+
+class TrackingHistorySerializer(serializers.ModelSerializer, TrackingHistoryExamples):
     """Tracking history to log text of the package."""
 
     class Meta:
@@ -57,3 +71,11 @@ class PackageInSerializer(serializers.ModelSerializer, PackageInExamples):
             origin = Address.objects.create(**origin.validated_data)
             destination = Address.objects.create(**destination.validated_data)
             return Package.objects.create(**validated_data, origin_address=origin, destination_address=destination)
+
+
+class PackageCreatedSerializer(serializers.ModelSerializer, PackageCreatedExamples):
+    """A complete package model."""
+
+    class Meta:
+        model = Package
+        fields = ["tracking_number"]
