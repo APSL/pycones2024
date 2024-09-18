@@ -9,7 +9,7 @@ python_files = [
 ]
 
 # https://pytest-django.readthedocs.io/en/latest/database.html
-addopts = "--reuse-db --no-migrations --flake8 --black"
+addopts = "--reuse-db --no-migrations"
 
 #  Running test in paralell https://doc.pytest.org/en/latest/xdist.html
 # addopts = "--reuse-db --no-migrations --cipdb --flake8 --mypy --black -n auto"
@@ -40,16 +40,6 @@ norecursedirs = [
     "templates",
     "locale",
 ]
-
-# This config is for running flake8 within pytest. The config for flake8 stand-alone is in .flake8 file.
-# https://pep8.readthedocs.io/en/latest/intro.html#error-codes
-# https://flake8.pycqa.org/en/latest/user/error-codes.html
-flake8-max-line-length = 120
-flake8-max-doc-length = 120
-flake8-max-complexity = 10
-# extend-ignore is not supported so we ignore the defaults ones plus E203
-# https://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-ignore
-flake8-ignore = ["E121", "E123", "E126", "E226", "E24", "E704", "W503", "W504", "E203"]
 
 [tool.black]
 line-length = 120

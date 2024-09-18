@@ -5,7 +5,9 @@ from rest_framework.generics import get_object_or_404
 
 from api.serializers import (
     PackageInSerializer,
-    PackageSerializer, TrackingHistoryInSerializer,
+    PackageSerializer,
+    TrackingHistoryInSerializer,
+    PackageCreatedSerializer,
 )
 from core.models import Package, TrackingHistory
 
@@ -27,6 +29,7 @@ class CourierTrackingViewSet(viewsets.ModelViewSet):
 
 class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.all()
+    lookup_field = "tracking_number"
     serializer_class = PackageInSerializer
 
     def create(self, request, *args, **kwargs):

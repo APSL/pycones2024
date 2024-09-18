@@ -37,8 +37,7 @@
       "status": 1,
       "origin_address": 1,
       "destination_address": 2,
-      "created": "2023-11-01T00:00:00Z",
-      "modified": "2023-11-01T00:00:00Z"
+      "created": "2023-11-01T00:00:00Z"
     }
   },
   {
@@ -49,8 +48,7 @@
       "status": 1,
       "origin_address": 2,
       "destination_address": 1,
-      "created": "2023-11-01T00:00:00Z",
-      "modified": "2023-11-01T00:00:00Z"
+      "created": "2023-11-01T00:00:00Z"
     }
   },
   {
@@ -61,8 +59,7 @@
       "status": 0,
       "origin_address": 2,
       "destination_address": 1,
-      "created": "2023-11-01T00:00:00Z",
-      "modified": "2023-11-01T00:00:00Z"
+      "created": "2023-11-01T00:00:00Z"
     }
   }
 ]

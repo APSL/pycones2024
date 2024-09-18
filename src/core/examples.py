@@ -51,6 +51,20 @@ class TrackingHistoryInExamples:
         ]
 
 
+class TrackingHistoryExamples:
+    @staticmethod
+    def examples() -> List[OpenApiExample]:
+        return [
+            OpenApiExample(
+                name="Pick-up",
+                value={
+                    "text": "Pick-up / Driver’s Pick-up.",
+                    "timestamp": "2024-09-05T15:44:19.724065Z",
+                },
+            ),
+        ]
+
+
 class PackageExamples:
     @staticmethod
     def examples() -> List[OpenApiExample]:
@@ -106,6 +120,19 @@ class PackageInExamples:
                         "postal_code": "46019",
                         "country": "España",
                     },
+                },
+            )
+        ]
+
+
+class PackageCreatedExamples:
+    @staticmethod
+    def examples() -> List[OpenApiExample]:
+        return [
+            OpenApiExample(
+                name="Example",
+                value={
+                    "tracking_number": "hYHnBAIy",
                 },
             )
         ]
