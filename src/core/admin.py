@@ -20,19 +20,13 @@ class PackageAdmin(admin.ModelAdmin):
     list_display = (
         "tracking_number",
         "created",
-        "modified",
         "status",
-        "activate_date",
-        "deactivate_date",
         "origin_address",
         "destination_address",
     )
     list_filter = (
         "status",
         "created",
-        "modified",
-        "activate_date",
-        "deactivate_date",
         "origin_address",
         "destination_address",
     )
@@ -41,5 +35,5 @@ class PackageAdmin(admin.ModelAdmin):
 
 @admin.register(TrackingHistory)
 class TrackingHistoryAdmin(admin.ModelAdmin):
-    list_display = ("id", "package", "location", "timestamp")
+    list_display = ("id", "package", "text", "timestamp")
     list_filter = ("package", "timestamp")

@@ -5,25 +5,11 @@ from api.views import PostalClerkPackagesViewSet, AnonPackagesViewSet, CourierTr
 app_name = "api"
 urlpatterns = [
     path(
-        "public/packages/<str:tracking_number>/",
-        AnonPackagesViewSet.as_view({"get": "retrieve"}),
-        name="anon-packages-detail",
-    ),
-    # courier
-    path(
-        "courier/packages/<str:tracking_number>/tracking/",
-        CourierTrackingViewSet.as_view({"post": "create"}),
-        name="courier-packages-detail",
-    ),
-    # admin
-    path(
         "postal-clerk/packages/",
-        PostalClerkPackagesViewSet.as_view({"get": "list", "post": "create"}),
-        name="admin-packages",
+        PostalClerkPackagesViewSet.as_view({"post": "create"}),
     ),
     path(
         "postal-clerk/packages/<str:tracking_number>/",
         PostalClerkPackagesViewSet.as_view({"delete": "destroy"}),
-        name="admin-packages-delete",
     ),
 ]

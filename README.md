@@ -14,7 +14,7 @@
 
 * Conocer las bases de la programación.
 * Disponer de un IDE.
-* Python 3.6+
+* Python 3.9+
 
 
 ## Instalación
@@ -26,7 +26,11 @@
     git clone git@github.com:APSL/pycones2024.git
     ```
 
-2. Instalamos dependencias.
+2. Instalamos dependencias. Tenemos formas de hacerlo.
+    ```bash
+    pip install -r requirements.txt
+    ```
+
     ```bash
     pipenv install --dev
     ```
@@ -46,4 +50,4 @@
 5. Visita tú web! Dispones de los usuarios `admin`, `Clerk` y `Courier`, todos con el password `superseguro`.
 
 * http://localhost:8000/admin
-* http://localhost:8000/api/
+* http://localhost:8000/schema/

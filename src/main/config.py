@@ -1,5 +1,4 @@
 from configparser import ConfigParser, NoOptionError
-from typing import Any
 
 
 class Config:
@@ -9,15 +8,15 @@ class Config:
         self._config = ConfigParser()
         self._config.read([configfile, local_configfile])
 
-    def get(self, section: str, key: str, default: Any | None = None):
+    def get(self, section: str, key: str, default=None):
         res = self._get("getint", section, key)
-        if res:
+        if res is not None:
             return res  # int
         res = self._get("getfloat", section, key)
-        if res:
+        if res is not None:
             return res  # float
         res = self._get("getboolean", section, key)
-        if res:
+        if res is not None:
             return res  # boolean
 
         try:
