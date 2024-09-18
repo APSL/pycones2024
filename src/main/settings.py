@@ -4,7 +4,6 @@ from pathlib import Path
 
 from configurations import Configuration
 
-from core import enums
 from main.config import Config
 
 config = Config("app.ini", "app.local.ini")
@@ -186,7 +185,6 @@ class Base(Configuration):
 
     REST_FRAMEWORK = {
         "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.BasicAuthentication",),
-        "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"],
         "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",  # drf-spectacular
     }
 

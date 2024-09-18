@@ -1,7 +1,7 @@
 [
   {
     "model": "auth.user",
-    "pk": 9998,
+    "pk": 9999,
     "fields": {
       "username": "PostalClerkTest",
       "email": "admin@example.com",
@@ -16,7 +16,7 @@
   },
   {
     "model": "auth.user",
-    "pk": 9999,
+    "pk": 9998,
     "fields": {
       "username": "CourierTest",
       "email": "courier@example.com",
@@ -31,7 +31,7 @@
   },
   {
     "model": "core.package",
-    "pk": 1,
+    "pk": 9999,
     "fields": {
       "tracking_number": "123456789",
       "status": 1,
@@ -43,10 +43,22 @@
   },
   {
     "model": "core.package",
-    "pk": 2,
+    "pk": 9998,
     "fields": {
       "tracking_number": "987654321",
       "status": 1,
+      "origin_address": 2,
+      "destination_address": 1,
+      "created": "2023-11-01T00:00:00Z",
+      "modified": "2023-11-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.package",
+    "pk": 9997,
+    "fields": {
+      "tracking_number": "555555555",
+      "status": 0,
       "origin_address": 2,
       "destination_address": 1,
       "created": "2023-11-01T00:00:00Z",
