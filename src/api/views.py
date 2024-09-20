@@ -18,18 +18,29 @@ class AnonPackagesViewSet(viewsets.ModelViewSet):
     queryset = Package.objects
     lookup_field = "tracking_number"
     serializer_class = PackageSerializer
+    permission_classes = (AllowAny,)
 
 
 class CourierTrackingViewSet(viewsets.GenericViewSet):
+    queryset = TrackingHistory.objects
+    permission_classes = (CourierPermission,)
 
     def create(self, request, *args, **kwargs):
-        pass
+        package = Package.objects.get(tracking_number=kwargs.pop("tracking_number"))
+        data = {"package": package.id}
+        data.update(request.data)
+        serializer = TrackingHistoryInSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({}, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
     queryset = Package.objects
     lookup_field = "tracking_number"
     serializer_class = PackageInSerializer
+    permission_classes = (PostalClerkPermission,)
 
     def create(self, request, *args, **kwargs):
         serializer = PackageInSerializer(data=request.data)
