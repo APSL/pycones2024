@@ -38,8 +38,6 @@ class AnonPackagesViewSet(viewsets.ModelViewSet):
 
 
 class CourierTrackingViewSet(viewsets.GenericViewSet):
-    queryset = TrackingHistory.objects
-    permission_classes = (CourierPermission,)
 
     @extend_schema(
         summary="Tracking History Create.",
@@ -56,14 +54,7 @@ class CourierTrackingViewSet(viewsets.GenericViewSet):
         examples=TrackingHistoryInSerializer.examples(),
     )
     def create(self, request, *args, **kwargs):
-        package = Package.objects.get(tracking_number=kwargs.pop("tracking_number"))
-        data = {"package": package.id}
-        data.update(request.data)
-        serializer = TrackingHistoryInSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse({}, status=status.HTTP_201_CREATED)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        pass
 
 
 class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
