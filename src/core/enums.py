@@ -14,7 +14,6 @@ class Permissions(str, Enum):
 
 
 class VersionAPI(str, Enum):
-    LATEST = "latest"
     V1 = "v1"
     V2 = "v2"
 

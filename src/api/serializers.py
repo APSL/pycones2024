@@ -71,7 +71,10 @@ class TrackingHistoryInSerializer(serializers.ModelSerializer):
 
 class PackageArchiveSerializer(serializers.ModelSerializer):
     """Archive a package with tracking number."""
-    pass
+
+    class Meta:
+        model = Package
+        fields = ["status", "deactivate_date"]
 
 
 class PackageSerializer(serializers.ModelSerializer):

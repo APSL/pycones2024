@@ -24,7 +24,7 @@ urlpatterns = [
     ),
     path(
         "postal-clerk/packages/<str:tracking_number>/",
-        PostalClerkPackagesViewSet.as_view({"delete": "destroy"}),
-        name="admin-packages-delete",
+        PostalClerkPackagesViewSet.as_view({"delete": "destroy", "patch": "partial_update"}),
+        name="admin-packages-archive",
     ),
 ]

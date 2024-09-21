@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.http import JsonResponse
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from django.utils import timezone
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
@@ -41,7 +43,7 @@ class AnonPackagesViewSet(viewsets.ModelViewSet):
 
 
 class CourierTrackingViewSet(viewsets.GenericViewSet):
-    queryset = TrackingHistory.objects.filter(status=1)
+    queryset = TrackingHistory.objects.filter(package__status=1)
     permission_classes = (CourierPermission,)
 
     @extend_schema(
@@ -82,7 +84,6 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
                 return PackageArchiveSerializer
         return PackageSerializer
 
-
     @extend_schema(
         summary="Create new package with default started history.",
         request=PackageInSerializer,
@@ -115,6 +116,7 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
+        deprecated=True,
         summary="Remove a package.",
         responses={
             status.HTTP_204_NO_CONTENT: OpenApiResponse(
@@ -132,6 +134,25 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
         """
         return super().destroy(request, *args, **kwargs)
 
+    @extend_schema(
+        summary="Logical delete of package.",
+        request=None,
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Package successfully archived.",
+                response=PackageArchiveSerializer,
+            ),
+            status.HTTP_401_UNAUTHORIZED: OpenApiResponse(description="Unauthorized."),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="No permissions."),
+            status.HTTP_404_NOT_FOUND: OpenApiResponse(description="No Package matches the given query."),
+        },
+    )
     def partial_update(self, request, *args, **kwargs):
-        """Archive the package."""
-        pass
+        """Archive a package.
+
+        An archived package is equivalent to a **logical deletion**.
+
+        Turn `is_active = False` and sets `deactivate_date`.
+        """
+        request.data.update({"status": 0, "deactivate_date": timezone.now()})
+        return super().partial_update(request, *args, **kwargs)
