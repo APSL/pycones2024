@@ -69,6 +69,11 @@ class TrackingHistoryInSerializer(serializers.ModelSerializer):
         ]
 
 
+class PackageArchiveSerializer(serializers.ModelSerializer):
+    """Archive a package with tracking number."""
+    pass
+
+
 class PackageSerializer(serializers.ModelSerializer):
     """A complete package model."""
 

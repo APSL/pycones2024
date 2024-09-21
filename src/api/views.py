@@ -10,19 +10,19 @@ from api.serializers import (
     PackageCreatedSerializer,
     PackageSerializer,
     TrackingHistoryInSerializer,
+    PackageArchiveSerializer,
 )
 from core.models import Package, TrackingHistory
 
 
 class AnonPackagesViewSet(viewsets.ModelViewSet):
-    queryset = Package.objects
+    queryset = Package.objects.filter(status=1)
     lookup_field = "tracking_number"
     serializer_class = PackageSerializer
     permission_classes = (AllowAny,)
 
     @extend_schema(
         summary="Package Detail.",
-        description="Gets the complete detail of a package by tracking number.",
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Gets the complete detail of package.",
@@ -34,39 +34,59 @@ class AnonPackagesViewSet(viewsets.ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
+        """
+        Gets the complete detail of a package by tracking number.
+        """
         return super().retrieve(request, *args, **kwargs)
 
 
 class CourierTrackingViewSet(viewsets.GenericViewSet):
+    queryset = TrackingHistory.objects.filter(status=1)
+    permission_classes = (CourierPermission,)
 
     @extend_schema(
-        summary="Tracking History Create.",
-        description="Create a tracking status for a package.",
+        summary="Create new history entry for a package.",
         request=TrackingHistoryInSerializer,
+        examples=TrackingHistoryInSerializer.examples(),
         responses={
-            status.HTTP_201_CREATED: OpenApiResponse(
-                description="Create new tracking story.",
-            ),
+            status.HTTP_201_CREATED: OpenApiResponse(description="Create new tracking story."),
             status.HTTP_401_UNAUTHORIZED: OpenApiResponse(description="Unauthorized."),
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="No permissions."),
             status.HTTP_500_INTERNAL_SERVER_ERROR: OpenApiResponse(description="Package not found."),
         },
-        examples=TrackingHistoryInSerializer.examples(),
     )
     def create(self, request, *args, **kwargs):
-        pass
+        """
+        Create a tracking status for a package.
+        """
+        package = Package.objects.get(tracking_number=kwargs.pop("tracking_number"))
+        data = {"package": package.id}
+        data.update(request.data)
+        serializer = TrackingHistoryInSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({}, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
     queryset = Package.objects
     lookup_field = "tracking_number"
-    serializer_class = PackageSerializer
     permission_classes = (PostalClerkPermission,)
 
+    def get_serializer_class(self):
+        match self.request.method:
+            case "POST":
+                return PackageInSerializer
+            case "PATCH":
+                return PackageArchiveSerializer
+        return PackageSerializer
+
+
     @extend_schema(
-        summary="Package Create.",
-        description="Create a new package and two addresses to track the package.",
+        summary="Create new package with default started history.",
         request=PackageInSerializer,
+        examples=PackageInSerializer.examples(),
         responses={
             status.HTTP_201_CREATED: OpenApiResponse(
                 description="Gets the tracking number of the created package.",
@@ -77,9 +97,11 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
             status.HTTP_401_UNAUTHORIZED: OpenApiResponse(description="Unauthorized."),
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="No permissions."),
         },
-        examples=PackageInSerializer.examples(),
     )
     def create(self, request, *args, **kwargs):
+        """
+        Create a new package and two addresses to track the package.
+        """
         serializer = PackageInSerializer(data=request.data)
         if serializer.is_valid():
             package = serializer.save()
@@ -93,8 +115,7 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
-        summary="Package Destroy.",
-        description="Logical delete of package in cascade.",
+        summary="Remove a package.",
         responses={
             status.HTTP_204_NO_CONTENT: OpenApiResponse(
                 description="Package successfully deleted.",
@@ -106,4 +127,11 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
         },
     )
     def destroy(self, request, *args, **kwargs):
+        """
+        Logical delete of package in cascade.
+        """
         return super().destroy(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        """Archive the package."""
+        pass
