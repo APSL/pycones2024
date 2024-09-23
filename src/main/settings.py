@@ -4,6 +4,7 @@ from pathlib import Path
 
 from configurations import Configuration
 
+from core.enums import VersionAPI
 from main.config import Config
 
 config = Config("app.ini", "app.local.ini")
@@ -201,6 +202,10 @@ class Base(Configuration):
             "knox.auth.TokenAuthentication",
         ),
         "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",  # drf-spectacular
+        "DEFAULT_VERSIONING_CLASS": "main.versioning.XAPIVersionScheme",
+        "DEFAULT_VERSION": VersionAPI.V2,
+        "ALLOWED_VERSIONS": VersionAPI.list(),
+        "VERSION_PARAM": "version",
     }
 
     # docs https://drf-spectacular.readthedocs.io/en/latest/settings.html

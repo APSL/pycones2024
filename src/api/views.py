@@ -14,6 +14,7 @@ from api.serializers import (
     TrackingHistoryInSerializer,
     PackageArchiveSerializer,
 )
+from core.enums import VersionAPI
 from core.models import Package, TrackingHistory
 
 
@@ -88,6 +89,15 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
         summary="Create new package with default started history.",
         request=PackageInSerializer,
         examples=PackageInSerializer.examples(),
+        parameters=[
+            OpenApiParameter(
+                "x-api-version",
+                description="API version.",
+                location=OpenApiParameter.HEADER,
+                enum=[VersionAPI.V1, VersionAPI.V2],
+                default=settings.REST_FRAMEWORK["DEFAULT_VERSION"],
+            ),
+        ],
         responses={
             status.HTTP_201_CREATED: OpenApiResponse(
                 description="Gets the tracking number of the created package.",
@@ -106,9 +116,13 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
         serializer = PackageInSerializer(data=request.data)
         if serializer.is_valid():
             package = serializer.save()
+            location = "Info received / Registered parcel data, parcel not dispatched yet / Pre-advice"
+            if request.version >= VersionAPI.V2:
+                location = "Info received / Registered"
+
             history = TrackingHistory.objects.create(
                 package=package,
-                location="Info received / Registered parcel data, parcel not dispatched yet / Pre-advice",
+                location=location,
             )
             history.save()
             data = PackageCreatedSerializer(package).data

@@ -23,3 +23,18 @@ class VersionAPI(str, Enum):
 
     def __str__(self) -> str:
         return self.value
+
+    def __lt__(self, other):
+        version = self.value[1:]
+        other_version = other.value[1:]
+        return float(version) < float(other_version)
+
+    def __eq__(self, other):
+        version = self.value[1:]
+        other_version = other.value[1:]
+        return float(version) == float(other_version)
+
+    def __gt__(self, other):
+        version = self.value[1:]
+        other_version = other.value[1:]
+        return float(version) > float(other_version)
