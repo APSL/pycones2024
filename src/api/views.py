@@ -24,7 +24,16 @@ class CourierTrackingViewSet(viewsets.ModelViewSet):
     serializer_class = TrackingHistoryInSerializer
 
     def create(self, request, *args, **kwargs):
-        raise NotImplementedError("Not implemented yet")
+        package = get_object_or_404(
+            Package.objects.filter(status=Package.ACTIVE_STATUS), tracking_number=kwargs["tracking_number"]
+        )
+        data = request.data.copy()
+        data["package"] = package.id
+        serializer = self.get_serializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
