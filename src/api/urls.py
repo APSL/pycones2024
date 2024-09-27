@@ -18,6 +18,16 @@ urlpatterns = [
     ),
     # clerk / admin
     path(
+        "public/packages/<str:tracking_number>/",
+        AnonPackagesViewSet.as_view({"get": "retrieve"}),
+    ),
+    # courier
+    path(
+        "courier/packages/<str:tracking_number>/tracking/",
+        CourierTrackingViewSet.as_view({"post": "create"}),
+    ),
+    # clerk / admin
+    path(
         "postal-clerk/packages/",
         PostalClerkPackagesViewSet.as_view({"post": "create"}),
         name="admin-packages"
