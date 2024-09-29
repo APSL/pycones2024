@@ -200,6 +200,10 @@ class Base(Configuration):
             "rest_framework.permissions.IsAuthenticated",
         ],
         "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",  # drf-spectacular
+        "DEFAULT_VERSIONING_CLASS": "main.versioning.XAPIVersionScheme",
+        "DEFAULT_VERSION": "v2",
+        "ALLOWED_VERSIONS": ["v1", "v2"],
+        "VERSION_PARAM": "version",
     }
 
     # docs https://drf-spectacular.readthedocs.io/en/latest/settings.html
