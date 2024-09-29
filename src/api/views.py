@@ -8,7 +8,7 @@ from api.serializers import (
     PackageInSerializer,
     PackageSerializer,
     TrackingHistoryInSerializer,
-    PackageCreatedSerializer,
+    PackageCreatedSerializer, TrackingHistorySerializer,
 )
 from core.models import Package, TrackingHistory
 
@@ -78,16 +78,18 @@ class CourierTrackingViewSet(viewsets.ModelViewSet):
         * param kwargs:
         * return: serialized tracking history
         """
-        package = get_object_or_404(
-            Package.objects.filter(status=Package.ACTIVE_STATUS), tracking_number=kwargs["tracking_number"]
-        )
-        data = request.data.copy()
-        data["package"] = package.id
-        serializer = self.get_serializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer_in = self.get_serializer(data=request.data)
+        if serializer_in.is_valid():
+            package = get_object_or_404(
+                Package.objects.filter(status=Package.ACTIVE_STATUS), tracking_number=kwargs["tracking_number"]
+            )
+            data = serializer_in.validated_data.copy()
+            data["package"] = package.id
+            serializer = TrackingHistorySerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse({}, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer_in.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
