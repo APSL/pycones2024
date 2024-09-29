@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from drf_spectacular.utils import OpenApiResponse, extend_schema
+from drf_spectacular.utils import OpenApiResponse, extend_schema, OpenApiParameter
 from rest_framework import status, permissions
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
@@ -8,7 +8,8 @@ from api.serializers import (
     PackageInSerializer,
     PackageSerializer,
     TrackingHistoryInSerializer,
-    PackageCreatedSerializer, TrackingHistorySerializer,
+    PackageCreatedSerializer,
+    TrackingHistorySerializer,
 )
 from core.models import Package, TrackingHistory
 
@@ -124,6 +125,15 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary="Remove a package.",
+        parameters=[
+            OpenApiParameter(
+                name="x-api-version",
+                description="API version.",
+                location=OpenApiParameter.HEADER,
+                enum=["v1", "v2"],
+                default="v2",
+            ),
+        ],
         responses={
             status.HTTP_204_NO_CONTENT: OpenApiResponse(
                 description="Package successfully deleted.",
@@ -136,7 +146,13 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         """
         Logical delete of a package. Actually disables a package.
+
+        **IMPORTANT: v1 remove from database!**
         """
+        if request.version == "v1":
+            package = get_object_or_404(Package, tracking_number=kwargs["tracking_number"])
+            package.delete()
+            return JsonResponse(data={}, status=status.HTTP_204_NO_CONTENT)
         package = get_object_or_404(self.queryset, tracking_number=kwargs["tracking_number"])
         package.status = Package.INACTIVE_STATUS
         package.save()
