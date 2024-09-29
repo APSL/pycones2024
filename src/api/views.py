@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from drf_spectacular.utils import OpenApiResponse, extend_schema
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
@@ -13,10 +13,16 @@ from api.serializers import (
 from core.models import Package, TrackingHistory
 
 
+class IsCourier(permissions.BasePermission):
+    def has_permission(self, request, view) -> bool:
+        return
+
+
 class AnonPackagesViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.filter(status=Package.ACTIVE_STATUS)
     lookup_field = "tracking_number"
     serializer_class = PackageSerializer
+    permission_classes = (permissions.AllowAny,)
 
     @extend_schema(
         summary="Package Detail.",

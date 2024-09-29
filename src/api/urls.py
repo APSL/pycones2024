@@ -1,9 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 
 from api.views import PostalClerkPackagesViewSet, AnonPackagesViewSet, CourierTrackingViewSet
 
 app_name = "api"
 urlpatterns = [
+    path("auth/", include(("auth.urls", "auth"))),
     path(
         "public/packages/<str:tracking_number>/",
         AnonPackagesViewSet.as_view({"get": "retrieve"}),

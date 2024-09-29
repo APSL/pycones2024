@@ -36,6 +36,7 @@ class Base(Configuration):
         "django_extensions",
         "rest_framework",
         "drf_spectacular",
+        "knox",
         # apps
         "main",
         "core.apps.CoreConfig",
@@ -183,8 +184,21 @@ class Base(Configuration):
         MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
         INTERNAL_IPS = ["127.0.0.1"]
 
+    REST_KNOX = {
+        "SECURE_HASH_ALGORITHM": config.get("Authentication", "SECURE_HASH_ALGORITHM", "hashlib.sha512"),
+        "AUTH_TOKEN_CHARACTER_LENGTH": config.get("Authentication", "AUTH_TOKEN_CHARACTER_LENGTH", "64"),
+        "TOKEN_TTL": timedelta(minutes=config.get("Authentication", "TOKEN_TTL_IN_MINUTES", 600)),
+        "USER_SERIALIZER": "knox.serializers.UserSerializer",
+        "TOKEN_LIMIT_PER_USER": config.get("Authentication", "TOKEN_LIMIT_PER_USER", None),
+        "AUTO_REFRESH": config.get("Authentication", "AUTO_REFRESH", False),
+        "MIN_REFRESH_INTERVAL": config.get("Authentication", "MIN_REFRESH_INTERVAL_IN_SECONDS", 60),
+        "TOKEN_MODEL": "knox.AuthToken",
+    }
     REST_FRAMEWORK = {
-        "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.BasicAuthentication",),
+        "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",),
+        "DEFAULT_PERMISSION_CLASSES": [
+            "rest_framework.permissions.IsAuthenticated",
+        ],
         "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",  # drf-spectacular
     }
 
