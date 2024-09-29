@@ -4,6 +4,9 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from api.serializers import TrackingHistoryInSerializer
+from core.models import TrackingHistory
+
 
 @pytest.mark.django_db
 class AdminPackageTests(APITestCase):
@@ -33,11 +36,7 @@ class AdminPackageTests(APITestCase):
             ),
         }
 
-        response = self.client.post(
-            path=reverse("api:admin-packages"),
-            data=data,
-            format="json",
-        )
+        response = self.client.post(path=reverse("api:admin-packages"), data=data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("tracking_number", response.json())
@@ -52,8 +51,15 @@ class AdminPackageTests(APITestCase):
 class CourierPackageTests(APITestCase):
     fixtures = ["initial_data", "test_data"]
 
+    def setUp(self):
+        self.client.force_authenticate(user=User.objects.get(username="CourierTest"))
+
     def test_packages_tracking_create(self):
-        assert False
+        url = "/api/courier/packages/{}/tracking/".format("123456789")
+        instance = TrackingHistory(text="Example text")
+        serializer = TrackingHistoryInSerializer(instance)
+        response = self.client.post(url, data=serializer.data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
 @pytest.mark.django_db
@@ -61,4 +67,9 @@ class AnonPackageTests(APITestCase):
     fixtures = ["initial_data", "test_data"]
 
     def test_packages_retrieve(self):
-        assert False
+        url = "/api/public/packages/{}/".format("123456789")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("tracking_number", response.json())
+        self.assertIn("origin_address", response.json())
+        self.assertIn("destination_address", response.json())

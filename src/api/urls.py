@@ -17,7 +17,11 @@ urlpatterns = [
         name="courier-packages",
     ),
     # clerk / admin
-    path("postal-clerk/packages/", PostalClerkPackagesViewSet.as_view({"post": "create"}), name="admin-packages"),
+    path(
+        "postal-clerk/packages/",
+        PostalClerkPackagesViewSet.as_view({"post": "create"}),
+        name="admin-packages"
+    ),
     path(
         "postal-clerk/packages/<str:tracking_number>/",
         PostalClerkPackagesViewSet.as_view({"delete": "destroy"}),
