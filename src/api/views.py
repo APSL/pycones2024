@@ -15,7 +15,12 @@ from core.models import Package, TrackingHistory
 
 class IsCourier(permissions.BasePermission):
     def has_permission(self, request, view) -> bool:
-        return
+        return request.user.groups.filter(name="Courier").exists()
+
+
+class IsPostalClerk(permissions.BasePermission):
+    def has_permission(self, request, view) -> bool:
+        return request.user.groups.filter(name="Postal clerk").exists()
 
 
 class AnonPackagesViewSet(viewsets.ModelViewSet):
@@ -50,6 +55,7 @@ class CourierTrackingViewSet(viewsets.ModelViewSet):
     queryset = TrackingHistory.objects.all()
     lookup_field = "tracking_number"
     serializer_class = TrackingHistoryInSerializer
+    permission_classes = (IsCourier,)
 
     @extend_schema(
         summary="Create new history entry for a package.",
@@ -60,6 +66,7 @@ class CourierTrackingViewSet(viewsets.ModelViewSet):
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
                 description="Probably JSON parse error or required field is missing."
             ),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="You do not have permission."),
             status.HTTP_404_NOT_FOUND: OpenApiResponse(description="Package not found."),
         },
     )
@@ -87,6 +94,7 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
     queryset = Package.objects.filter(status=Package.ACTIVE_STATUS)
     lookup_field = "tracking_number"
     serializer_class = PackageInSerializer
+    permission_classes = (IsPostalClerk,)
 
     @extend_schema(
         summary="Create new package.",
@@ -101,6 +109,7 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
                 description="Probably JSON parse error or required field is missing."
             ),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="You do not have permission."),
         },
     )
     def create(self, request, *args, **kwargs):
@@ -118,6 +127,7 @@ class PostalClerkPackagesViewSet(viewsets.ModelViewSet):
                 description="Package successfully deleted.",
                 response=None,
             ),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="You do not have permission."),
             status.HTTP_404_NOT_FOUND: OpenApiResponse(description="No Package matches the given query."),
         },
     )
