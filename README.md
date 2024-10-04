@@ -16,6 +16,10 @@
 * Disponer de un IDE.
 * Python 3.9+
 
+## Diapositivas del taller
+
+[link a las diapositivas del taller](https://docs.google.com/presentation/d/1NUa9EKM1aPK_KSGx1ESXvX1K_5BZ9SCVoFV7NXkpZsI/edit?usp=sharing)
+
 
 ## Instalación
 
